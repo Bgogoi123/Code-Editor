@@ -112,13 +112,13 @@ export default function Directories() {
   const renderTree = (nodes: RenderTree) => (
     <TreeItem
       onClick={() => handleSelectNode(nodes)}
-      onMouseOver={(e: any) => {
+      onMouseOver={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
         setCurrentTarget(nodes?.id);
         setDisplayControls(true);
         e.preventDefault();
         e.stopPropagation();
       }}
-      onMouseLeave={(e: any) => {
+      onMouseLeave={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
         setDisplayControls(false);
         e.preventDefault();
         e.stopPropagation();
