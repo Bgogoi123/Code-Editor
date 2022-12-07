@@ -13,14 +13,16 @@ import { useContext, useState } from "react";
 import { SelectedNodeContext } from "../../context/SelectedNodeContext";
 import { appendChildToNode } from "./operations";
 import { DirectoryContext } from "../../context/DirectoryContext";
+import { acceptedFilesRegex } from "../utils/regex";
 
-export default function Directories() {
+const Directories = () => {
   const [displayControls, setDisplayControls] = useState<boolean>(false);
   const [currentTarget, setCurrentTarget] = useState<number>(0);
   const [directoryName, setDirectoryName] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const { setSelectedNode } = useContext(SelectedNodeContext);
   const { data, setData } = useContext(DirectoryContext);
@@ -56,8 +58,24 @@ export default function Directories() {
     setFileDialogOpen(false);
   };
 
+  const checkFileType = () => {
+    const extension: string = fileName.split(".")[1];
+
+    if (acceptedFilesRegex.test(extension)) {
+      return true;
+    } else {
+      setErrorMessage("* Only Javascript (.js or .jsx) files are accepted! *");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+      return false;
+    }
+  };
+
   const handleFileCreate = () => {
-    if (fileName !== "") {
+    const checkType: boolean = checkFileType();
+
+    if (fileName !== "" && checkType) {
       setData(
         appendChildToNode(data, currentTarget, {
           id: uuid(),
@@ -110,36 +128,38 @@ export default function Directories() {
   };
 
   const renderTree = (nodes: RenderTree) => (
-    <TreeItem
-      onClick={() => handleSelectNode(nodes)}
-      onMouseOver={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-        setCurrentTarget(nodes?.id);
-        setDisplayControls(true);
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      onMouseLeave={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
-        setDisplayControls(false);
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-      key={nodes?.id}
-      nodeId={`${nodes?.id}`}
-      label={
-        <TreeItemLabel
-          currentTarget={currentTarget}
-          displayControls={displayControls}
-          handleFolderDialogOpen={handleFolderDialogOpen}
-          handleFileDialogOpen={handleFileDialogOpen}
-          nodes={nodes}
-          removeNode={removeNode}
-        />
-      }
-    >
-      {Array.isArray(nodes?.children)
-        ? nodes?.children?.map((node) => renderTree(node))
-        : null}
-    </TreeItem>
+    <>
+      <TreeItem
+        onClick={() => handleSelectNode(nodes)}
+        onMouseOver={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+          setCurrentTarget(nodes?.id);
+          setDisplayControls(true);
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onMouseLeave={(e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+          setDisplayControls(false);
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        key={nodes?.id}
+        nodeId={`${nodes?.id}`}
+        label={
+          <TreeItemLabel
+            currentTarget={currentTarget}
+            displayControls={displayControls}
+            handleFolderDialogOpen={handleFolderDialogOpen}
+            handleFileDialogOpen={handleFileDialogOpen}
+            nodes={nodes}
+            removeNode={removeNode}
+          />
+        }
+      >
+        {Array.isArray(nodes?.children)
+          ? nodes?.children?.map((node) => renderTree(node))
+          : null}
+      </TreeItem>
+    </>
   );
 
   return (
@@ -181,10 +201,9 @@ export default function Directories() {
           <Button onClick={handleFileCreate}>Create</Button>
         </DialogActions>
       </Dialog>
-      <FolderStructure
-        // data={data}
-        renderTree={renderTree}
-      />
+      <FolderStructure renderTree={renderTree} message={errorMessage} />
     </div>
   );
-}
+};
+
+export default Directories;

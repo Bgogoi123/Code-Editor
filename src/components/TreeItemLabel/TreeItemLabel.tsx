@@ -1,26 +1,27 @@
 import { useContext } from "react";
 import { DirectoryContext } from "../../context/DirectoryContext";
 import { TreeItemLabelProps } from "../../interfaces";
+import { fileIcon, folderIcon, treeLabelRoot } from "./styles";
 
-const TreeItemLabel: React.FC<TreeItemLabelProps> = ({
+const TreeItemLabel = ({
   currentTarget,
   displayControls,
   handleFolderDialogOpen,
   handleFileDialogOpen,
   nodes,
   removeNode,
-}) => {
+}: TreeItemLabelProps) => {
   const { data, setData } = useContext(DirectoryContext);
 
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {nodes?.name}{" "}
+    <div style={treeLabelRoot}>
+      {nodes?.name}
       {displayControls && nodes?.id === currentTarget && (
         <div style={{ display: "flex", alignItems: "center" }}>
           {nodes?.isFolder && (
             <>
               <svg
-                style={{ paddingLeft: "10px" }}
+                style={folderIcon}
                 width="17px"
                 height="17px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +43,7 @@ const TreeItemLabel: React.FC<TreeItemLabelProps> = ({
                 />
               </svg>
               <svg
-                style={{ paddingLeft: "5px" }}
+                style={fileIcon}
                 width="15px"
                 height="15px"
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +70,7 @@ const TreeItemLabel: React.FC<TreeItemLabelProps> = ({
             <></>
           ) : (
             <svg
-              style={{ paddingLeft: "5px" }}
+              style={fileIcon}
               width="15px"
               height="15px"
               xmlns="http://www.w3.org/2000/svg"

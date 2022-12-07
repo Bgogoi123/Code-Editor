@@ -1,0 +1,1 @@
+    export const acceptedFilesRegex = /^(js|jsx|json|md|txt|html)$/;

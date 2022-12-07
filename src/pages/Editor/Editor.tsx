@@ -41,13 +41,6 @@ const Editor = () => {
           </Grid>
           <Grid item>
             <CodeEditor onChange={onChange} selectedNode={selectedNode} />
-            {/* <CodeMirror
-              value={selectedNode.content}
-              height="200px"
-              theme="dark"
-              extensions={[javascript({ jsx: true })]}
-              onChange={onChange}
-            /> */}
           </Grid>
         </Grid>
       )}

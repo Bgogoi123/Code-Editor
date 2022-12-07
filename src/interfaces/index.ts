@@ -9,6 +9,7 @@ export interface RenderTree {
 
 export interface FolderStructureProps {
   renderTree: (nodes: RenderTree) => JSX.Element;
+  message: string;
 }
 
 export interface TreeItemLabelProps {
@@ -23,4 +24,16 @@ export interface TreeItemLabelProps {
 export interface CodeMirrorProps {
   selectedNode: RenderTree;
   onChange: (value: string) => void;
+}
+
+export interface RenderTreeItemProps {
+  // nodes: RenderTree;
+  handleSelectNode: (node: RenderTree) => void;
+  setCurrentTarget: (value: React.SetStateAction<number>) => void;
+  setDisplayControls: (value: React.SetStateAction<boolean>) => void;
+  currentTarget: number;
+  displayControls: boolean;
+  handleFolderDialogOpen: () => void;
+  handleFileDialogOpen: () => void;
+  removeNode(node: any, nodeId: any): any;
 }
