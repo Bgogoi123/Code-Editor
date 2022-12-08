@@ -82,6 +82,10 @@ const TreeItemLabel = ({
               onClick={(e: any) => {
                 //delete a node
                 setData(removeNode(data, nodes?.id));
+                // window.localStorage.setItem(
+                //   "folderStructure",
+                //   JSON.stringify(data)
+                // );
                 e.stopPropagation();
               }}
             >

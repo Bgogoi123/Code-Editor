@@ -9,7 +9,6 @@ export interface RenderTree {
 
 export interface FolderStructureProps {
   renderTree: (nodes: RenderTree) => JSX.Element;
-  message: string;
 }
 
 export interface TreeItemLabelProps {
@@ -36,4 +35,17 @@ export interface RenderTreeItemProps {
   handleFolderDialogOpen: () => void;
   handleFileDialogOpen: () => void;
   removeNode(node: any, nodeId: any): any;
+}
+
+export interface DialoguesProps {
+  open: boolean;
+  handleCloseDialogue: () => void;
+  handleChangeDialogue: (e: any) => void;
+  handleCreateNode: () => void;
+}
+
+export interface PopOverProps {
+  open: boolean;
+  handleClose: () => void;
+  message: string
 }

@@ -1,31 +1,52 @@
 import TreeItem from "@mui/lab/TreeItem";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import uuid from "react-uuid";
 import { RenderTree } from "../../interfaces/index";
 import FolderStructure from "../../components/FolderStructure";
 import TreeItemLabel from "../../components/TreeItemLabel";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SelectedNodeContext } from "../../context/SelectedNodeContext";
-import { appendChildToNode } from "./operations";
+import { appendChildToNode, checkFileType } from "./operations";
 import { DirectoryContext } from "../../context/DirectoryContext";
-import { acceptedFilesRegex } from "../utils/regex";
+import Dialogues from "../../components/Dialogues";
+import PopOver from "../../components/PopOver";
 
 const Directories = () => {
   const [displayControls, setDisplayControls] = useState<boolean>(false);
   const [currentTarget, setCurrentTarget] = useState<number>(0);
   const [directoryName, setDirectoryName] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
-  const [open, setOpen] = useState(false);
-  const [fileDialogOpen, setFileDialogOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [warningOpen, setWarningOpen] = useState<boolean>(false);
+  const [fileDialogOpen, setFileDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const { setSelectedNode } = useContext(SelectedNodeContext);
   const { data, setData } = useContext(DirectoryContext);
+
+  useEffect(() => {
+    const folderStructureData: any =
+      window.localStorage.getItem("folderStructure");
+
+    if (folderStructureData !== null) {
+      setData(JSON.parse(folderStructureData));
+    } else {
+      setData({
+        id: 1,
+        name: "home",
+        isFolder: true,
+        children: [],
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data.children?.length === 0) return;
+    window.localStorage.setItem("folderStructure", JSON.stringify(data));
+  }, [data]);
+
+  const handleCloseWarning = () => {
+    setWarningOpen(false);
+  };
 
   const handleFolderDialogOpen = () => {
     setOpen(true);
@@ -58,22 +79,12 @@ const Directories = () => {
     setFileDialogOpen(false);
   };
 
-  const checkFileType = () => {
-    const extension: string = fileName.split(".")[1];
-
-    if (acceptedFilesRegex.test(extension)) {
-      return true;
-    } else {
-      setErrorMessage("* Only Javascript (.js or .jsx) files are accepted! *");
-      setTimeout(() => {
-        setErrorMessage("");
-      }, 3000);
-      return false;
-    }
-  };
-
   const handleFileCreate = () => {
-    const checkType: boolean = checkFileType();
+    const checkType: boolean = checkFileType(
+      fileName,
+      setErrorMessage,
+      setWarningOpen
+    );
 
     if (fileName !== "" && checkType) {
       setData(
@@ -164,44 +175,27 @@ const Directories = () => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleCloseDirectoryModal}>
-        <DialogContent>
-          <DialogContentText>Enter directory name</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={handleDirectoryFieldChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDirectoryModal}>Cancel</Button>
-          <Button onClick={handleCreateDirectory}>Create</Button>
-        </DialogActions>
-      </Dialog>
+      <Dialogues
+        open={open}
+        handleChangeDialogue={handleDirectoryFieldChange}
+        handleCloseDialogue={handleCloseDirectoryModal}
+        handleCreateNode={handleCreateDirectory}
+      />
 
-      <Dialog open={fileDialogOpen} onClose={handleFileDialogClose}>
-        <DialogContent>
-          <DialogContentText>Enter file name</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={handleFileFieldChange}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleFileDialogClose}>Cancel</Button>
-          <Button onClick={handleFileCreate}>Create</Button>
-        </DialogActions>
-      </Dialog>
-      <FolderStructure renderTree={renderTree} message={errorMessage} />
+      <Dialogues
+        open={fileDialogOpen}
+        handleChangeDialogue={handleFileFieldChange}
+        handleCloseDialogue={handleFileDialogClose}
+        handleCreateNode={handleFileCreate}
+      />
+
+      <PopOver
+        open={warningOpen}
+        message={errorMessage}
+        handleClose={handleCloseWarning}
+      />
+
+      <FolderStructure renderTree={renderTree} />
     </div>
   );
 };
