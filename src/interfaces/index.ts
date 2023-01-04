@@ -38,6 +38,7 @@ export interface RenderTreeItemProps {
 }
 
 export interface DialoguesProps {
+  type: "File" | "Folder";
   open: boolean;
   handleCloseDialogue: () => void;
   handleChangeDialogue: (e: any) => void;
@@ -47,5 +48,10 @@ export interface DialoguesProps {
 export interface PopOverProps {
   open: boolean;
   handleClose: () => void;
-  message: string
+  message: string;
+  type: string;
+  position: {
+    vertical: number | "center" | "top" | "bottom";
+    horizontal: number | "center" | "right" | "left";
+  };
 }

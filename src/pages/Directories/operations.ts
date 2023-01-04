@@ -1,5 +1,5 @@
-import { RenderTree } from "../../interfaces";
-import { acceptedFilesRegex } from "../utils/regex";
+// import { acceptedFilesRegex } from "../utils/regex";
+import { fileExtensionAtom } from "../../recoil/atom";
 
 // create a new file / folder:
 export const appendChildToNode = (node: any, nodeId: any, data: any) => {
@@ -21,89 +21,46 @@ export const appendChildToNode = (node: any, nodeId: any, data: any) => {
   return { ...node, children };
 };
 
-
 // Check the type of file being created:
 export const checkFileType = (
   fileName: string,
   setErrorMessage: (value: React.SetStateAction<string>) => void,
-  setWarningOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setWarningOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  selectedLanguage: string,
+  fileExtensionData:
+    | {
+        c: string;
+        cpp: string;
+        css: string;
+        dart: string;
+        html: string;
+        java: string;
+        javascript: string;
+        json: string;
+        jsx: string;
+        kotlin: string;
+        markdown: string;
+        python: string;
+        sass: string;
+        tsx: string;
+        typescript: string;
+      }
+    | any
 ) => {
-  const extension: string = fileName.split(".")[1];
-
-  if (acceptedFilesRegex.test(extension)) {
+  const splitLength = fileName.split(".").length;
+  const fileExtension: string = fileName.split(".")[splitLength - 1];
+  
+  if (fileExtension === fileExtensionData[selectedLanguage]) {
     return true;
   } else {
-    setErrorMessage("Only Javascript (.js or .jsx) files are accepted!");
+    setErrorMessage(
+      `Only ${fileExtensionData[selectedLanguage]} files are accepted!`
+    );
     setWarningOpen(true);
     setTimeout(() => {
       setErrorMessage("");
       setWarningOpen(false);
-    }, 3000);
+    }, 2000);
     return false;
   }
 };
-
-
-// check is a file already exist in the current directory:
-// export const checkFileDuplicacy = (
-//   currentTarget: number,
-//   fileName: string,
-//   data: RenderTree,
-//   setErrorMessage: (value: React.SetStateAction<string>) => void
-// ) => {
-//   const errMessage: string = "* File already exist! *";
-//   let status: boolean = true;
-//   console.log("setting true 1");
-
-//   console.log({ currentTarget });
-
-//   if (data === undefined) {
-//     console.log("node is undefined");
-//     status = true;
-//     console.log("setting true 2");
-//   }
-//   if (data.id === currentTarget) {
-//     console.log("data.id is equal to currentTarget");
-//     if (data.name === fileName) {
-//       duplicacyMessage(errMessage, setErrorMessage);
-//       status = false;
-//       console.log("setting false1");
-//     } else {
-
-
-//       // console.log("mapping children /// targetiD: ", currentTarget);
-//       // data.children?.forEach((value: RenderTree) => {
-//       //   if (value.name === fileName) {
-//       //     duplicacyMessage(errMessage, setErrorMessage);
-//       //     status = false;
-//       //     console.log("setting false 2");
-//       //   } else {
-//       //     checkFileDuplicacy(value.id, fileName, value, setErrorMessage);
-//       //   }
-//       // });
-//     }
-//   } else {
-//     data.children?.forEach((value: RenderTree) => {
-//       if (value.name === fileName) {
-//         duplicacyMessage(errMessage, setErrorMessage);
-//         status = false;
-//         console.log("setting false else");
-//       } else {
-//         checkFileDuplicacy(value.id, fileName, value, setErrorMessage);
-//       }
-//     });
-//   }
-//   console.log({ status });
-//   return status;
-// };
-
-// set error message for duplicate file names:
-// const duplicacyMessage = (
-//   message: string,
-//   setErrorMessage: (value: React.SetStateAction<string>) => void
-// ) => {
-//   setErrorMessage(message);
-//   setTimeout(() => {
-//     setErrorMessage("");
-//   }, 3000);
-// };

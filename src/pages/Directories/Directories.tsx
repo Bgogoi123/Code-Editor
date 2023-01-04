@@ -1,5 +1,6 @@
 import TreeItem from "@mui/lab/TreeItem";
 import uuid from "react-uuid";
+import { useRecoilValue } from "recoil";
 import { RenderTree } from "../../interfaces/index";
 import FolderStructure from "../../components/FolderStructure";
 import TreeItemLabel from "../../components/TreeItemLabel";
@@ -9,8 +10,13 @@ import { appendChildToNode, checkFileType } from "./operations";
 import { DirectoryContext } from "../../context/DirectoryContext";
 import Dialogues from "../../components/Dialogues";
 import PopOver from "../../components/PopOver";
+import { fileExtensionAtom, languageAtom } from "../../recoil/atom";
+import { CheckExtensionContext } from "../../context/CheckExtensionContext";
 
 const Directories = () => {
+  const selectedLanguage = useRecoilValue(languageAtom);
+  const fileExtensionData = useRecoilValue(fileExtensionAtom);
+
   const [displayControls, setDisplayControls] = useState<boolean>(false);
   const [currentTarget, setCurrentTarget] = useState<number>(0);
   const [directoryName, setDirectoryName] = useState<string>("");
@@ -22,6 +28,7 @@ const Directories = () => {
 
   const { setSelectedNode } = useContext(SelectedNodeContext);
   const { data, setData } = useContext(DirectoryContext);
+  const { setIsExtension } = useContext(CheckExtensionContext);
 
   useEffect(() => {
     const folderStructureData: any =
@@ -42,7 +49,29 @@ const Directories = () => {
   useEffect(() => {
     if (data.children?.length === 0) return;
     window.localStorage.setItem("folderStructure", JSON.stringify(data));
+
+    // index DB
+    const request = window.indexedDB.open("folderStructure", 3);
+    request.onerror = (event) => {
+      console.log({ event });
+    };
+    request.onsuccess = (event: any) => {
+      console.log({ event });
+      const db = event.target.result;
+      console.log({ db: db });
+      const objectStore = db.createObjectStore("folderStructure", {
+        keyPath: "ssn",
+      });
+      const customerObjectStore = db
+        .transaction("folderStructure", "readwrite")
+        .objectStore("folderStructure");
+      Object.values(data).forEach((customer) => {
+        customerObjectStore.add(customer);
+      });
+    };
   }, [data]);
+
+  useEffect(() => {}, [selectedLanguage]);
 
   const handleCloseWarning = () => {
     setWarningOpen(false);
@@ -83,7 +112,9 @@ const Directories = () => {
     const checkType: boolean = checkFileType(
       fileName,
       setErrorMessage,
-      setWarningOpen
+      setWarningOpen,
+      selectedLanguage,
+      fileExtensionData
     );
 
     if (fileName !== "" && checkType) {
@@ -91,7 +122,7 @@ const Directories = () => {
         appendChildToNode(data, currentTarget, {
           id: uuid(),
           name: fileName,
-          content: "/* type your javascript code here */",
+          content: "",
           isFolder: false,
           children: [],
         })
@@ -133,6 +164,7 @@ const Directories = () => {
   }
 
   const handleSelectNode = (node: RenderTree) => {
+    setIsExtension(false);
     if (!node.isFolder) {
       setSelectedNode(node);
     }
@@ -176,6 +208,7 @@ const Directories = () => {
   return (
     <div>
       <Dialogues
+        type="Folder"
         open={open}
         handleChangeDialogue={handleDirectoryFieldChange}
         handleCloseDialogue={handleCloseDirectoryModal}
@@ -183,6 +216,7 @@ const Directories = () => {
       />
 
       <Dialogues
+        type="File"
         open={fileDialogOpen}
         handleChangeDialogue={handleFileFieldChange}
         handleCloseDialogue={handleFileDialogClose}
@@ -193,6 +227,11 @@ const Directories = () => {
         open={warningOpen}
         message={errorMessage}
         handleClose={handleCloseWarning}
+        type="error"
+        position={{
+          vertical: "top",
+          horizontal: "left",
+        }}
       />
 
       <FolderStructure renderTree={renderTree} />

@@ -11,7 +11,7 @@ const FolderStructure = ({ renderTree }: FolderStructureProps) => {
 
   return (
     <TreeView
-      style={{ overflowX: "hidden" }}
+      style={{ overflowX: "hidden", width: "auto" }}
       aria-label="rich object"
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpanded={["root"]}

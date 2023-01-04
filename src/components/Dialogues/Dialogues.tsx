@@ -9,6 +9,7 @@ import {
 import { DialoguesProps } from "../../interfaces";
 
 const Dialogues = ({
+  type,
   open,
   handleCloseDialogue,
   handleChangeDialogue,
@@ -17,7 +18,7 @@ const Dialogues = ({
   return (
     <Dialog open={open} onClose={handleCloseDialogue}>
       <DialogContent>
-        <DialogContentText>Enter directory name</DialogContentText>
+        <DialogContentText>Enter {type} name</DialogContentText>
         <TextField
           autoFocus
           margin="dense"

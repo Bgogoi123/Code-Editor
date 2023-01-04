@@ -1,5 +1,5 @@
 export const treeView = {
-  height: "90vh",
+  height: "100vh",
   flexGrow: 1,
   width: "30vw",
   overflowY: "auto",
