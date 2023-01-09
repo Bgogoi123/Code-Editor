@@ -2,15 +2,18 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import CodeMirror from "@uiw/react-codemirror";
 import { Tooltip } from "@mui/material";
-import { useContext, useState } from "react";
-import { ExtensionsContext } from "../../context/ExtensionsContext";
-import uuid from "react-uuid";
+import { useContext, useEffect, useState } from "react";
 import { functionRegex } from "../../constants/regex";
 import PopOver from "../../components/PopOver";
+import { CheckExtensionContext } from "../../context/CheckExtensionContext";
+import { ExtensionListContext } from "../../context/ExtensionListContext";
 
 const CreateExtension = () => {
+  const { extensionId } = useContext(CheckExtensionContext);
+  const { extensionArray, setExtensionArray } =
+    useContext(ExtensionListContext);
+
   const [scriptContent, setScriptContent] = useState<string>("");
-  const { setExtension, extension } = useContext(ExtensionsContext);
   const [popOverState, setPopOverState] = useState<{
     open: boolean;
     message: string;
@@ -20,6 +23,16 @@ const CreateExtension = () => {
     message: "",
     type: "",
   });
+
+  const extensionIndex = extensionArray.findIndex((extensionData) => {
+    return extensionData.id === extensionId;
+  });
+
+  useEffect(() => {
+    if (extensionArray.length > 0) {
+      setScriptContent(extensionArray[extensionIndex].content);
+    }
+  }, [extensionId]);
 
   const placeholder = `/* Configure your Extension here [doesn't accept Arrow Functions] */`;
 
@@ -53,18 +66,20 @@ const CreateExtension = () => {
   };
 
   const saveExtension = () => {
-    let output;
+    // save extension:
+    if (scriptContent   !== "" && extensionId !== "") {
+      const tempArray = extensionArray;
+      tempArray[extensionIndex].content = scriptContent;
+      setExtensionArray(tempArray);
+      window.localStorage.setItem("extensions", JSON.stringify(extensionArray));
+    }
 
     function toUpperExtension(text: string) {
       text.toUpperCase();
-      console.log("upper case: ", text.toUpperCase());
-      output = text.toUpperCase();
     }
 
     function trimExtension(text: string) {
       text.trim();
-      console.log("trimmimg: ", text.trim());
-      output = text.trim();
     }
 
     function evaluateExtension(content: string) {
@@ -72,18 +87,9 @@ const CreateExtension = () => {
     }
 
     const myExtensions = [toUpperExtension, trimExtension, evaluateExtension];
-    const input: string = ` console.log("bello");    `;
+    const input: string = ` console.log("TEST: Running the extension..");    `;
 
     myExtensions.forEach((fn) => fn(input));
-
-    // if (scriptContent !== "") {
-    //   setExtension({
-    //     id: uuid(),
-    //     name: "someName",
-    //     content: scriptContent,
-    //   });
-    //   window.localStorage.setItem("extensions", JSON.stringify(extension));
-    // }
   };
 
   return (

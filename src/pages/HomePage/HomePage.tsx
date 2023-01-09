@@ -11,9 +11,12 @@ import SelectLanguage from "../Editor/SelectLanguage";
 import { CheckExtensionContext } from "../../context/CheckExtensionContext";
 import EnableExtension from "../EnableExtension";
 import CreateExtension from "../CreateExtension";
+import ExtensionList from "../ExtensionList";
+import { ExtensionListContext } from "../../context/ExtensionListContext";
 
 const HomePage = () => {
   const [isExtension, setIsExtension] = useState<boolean>(false);
+  const [extensionId, setExtensionId] = useState<string>("");
 
   const [data, setData] = useState<RenderTree>({
     id: 1,
@@ -32,11 +35,6 @@ const HomePage = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [openDirectories, setOpenDirectories] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", () => setWidth(window.innerWidth));
-  //   console.log("resizing");
-  // }, [window.innerWidth]);
-
   const handleOpenDirectories = () => {
     setOpenDirectories((prev) => !prev);
   };
@@ -46,7 +44,7 @@ const HomePage = () => {
       <DirectoryContext.Provider value={{ data, setData }}>
         <SelectedNodeContext.Provider value={{ selectedNode, setSelectedNode }}>
           <CheckExtensionContext.Provider
-            value={{ isExtension, setIsExtension }}
+            value={{ isExtension, setIsExtension, extensionId, setExtensionId }}
           >
             <Grid
               container
@@ -62,6 +60,7 @@ const HomePage = () => {
               {width > 600 ? (
                 <Grid container direction="column">
                   <EnableExtension />
+                  <ExtensionList />
                   <SelectLanguage />
                   <Directories />
                 </Grid>
@@ -79,6 +78,7 @@ const HomePage = () => {
                   >
                     <Grid container direction="column">
                       <EnableExtension />
+                      <ExtensionList />
                       <SelectLanguage />
                       <Directories />
                     </Grid>

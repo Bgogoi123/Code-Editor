@@ -51,24 +51,25 @@ const Directories = () => {
     window.localStorage.setItem("folderStructure", JSON.stringify(data));
 
     // index DB
-    const request = window.indexedDB.open("folderStructure", 3);
-    request.onerror = (event) => {
-      console.log({ event });
-    };
-    request.onsuccess = (event: any) => {
-      console.log({ event });
-      const db = event.target.result;
-      console.log({ db: db });
-      const objectStore = db.createObjectStore("folderStructure", {
-        keyPath: "ssn",
-      });
-      const customerObjectStore = db
-        .transaction("folderStructure", "readwrite")
-        .objectStore("folderStructure");
-      Object.values(data).forEach((customer) => {
-        customerObjectStore.add(customer);
-      });
-    };
+    // const request = window.indexedDB.open("folderStructure", 3);
+    // request.onerror = (event) => {
+    //   console.log({ event });
+    // };
+    // request.onsuccess = (event: any) => {
+    //   console.log({ event });
+    //   const db = event.target.result;
+    //   console.log({ db: db });
+    //   const objectStore = db.createObjectStore("folderStructure", {
+    //     keyPath: "ssn",
+    //   });
+    //   const customerObjectStore = db
+    //     .transaction("folderStructure", "readwrite")
+    //     .objectStore("folderStructure");
+    //   Object.values(data).forEach((customer) => {
+    //     customerObjectStore.add(customer);
+    //   });
+    // };
+
   }, [data]);
 
   useEffect(() => {}, [selectedLanguage]);

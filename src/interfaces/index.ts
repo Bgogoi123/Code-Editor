@@ -38,7 +38,7 @@ export interface RenderTreeItemProps {
 }
 
 export interface DialoguesProps {
-  type: "File" | "Folder";
+  type: "File" | "Folder" | "Extension";
   open: boolean;
   handleCloseDialogue: () => void;
   handleChangeDialogue: (e: any) => void;

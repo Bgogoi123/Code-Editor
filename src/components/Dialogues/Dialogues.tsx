@@ -18,7 +18,7 @@ const Dialogues = ({
   return (
     <Dialog open={open} onClose={handleCloseDialogue}>
       <DialogContent>
-        <DialogContentText>Enter {type} name</DialogContentText>
+        <DialogContentText>Enter {type} Name</DialogContentText>
         <TextField
           autoFocus
           margin="dense"
