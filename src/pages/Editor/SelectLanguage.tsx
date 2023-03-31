@@ -2,11 +2,9 @@ import {
   FormControl,
   MenuItem,
   OutlinedInput,
-  Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { useRecoilState } from "recoil";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { CustomSelect } from "../../components/CustomSelect";
 import { languageAtom, languagesAtom } from "../../recoil/atom";
 

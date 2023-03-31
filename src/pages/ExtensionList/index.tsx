@@ -20,6 +20,7 @@ const ExtensionList = () => {
     if (extensionData !== null) {
       setExtensionArray(JSON.parse(extensionData));
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

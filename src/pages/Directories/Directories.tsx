@@ -1,17 +1,17 @@
 import TreeItem from "@mui/lab/TreeItem";
+import { useContext, useEffect, useState } from "react";
 import uuid from "react-uuid";
 import { useRecoilValue } from "recoil";
-import { RenderTree } from "../../interfaces/index";
-import FolderStructure from "../../components/FolderStructure";
-import TreeItemLabel from "../../components/TreeItemLabel";
-import { useContext, useEffect, useState } from "react";
-import { SelectedNodeContext } from "../../context/SelectedNodeContext";
-import { appendChildToNode, checkFileType } from "./operations";
-import { DirectoryContext } from "../../context/DirectoryContext";
 import Dialogues from "../../components/Dialogues";
+import FolderStructure from "../../components/FolderStructure";
 import PopOver from "../../components/PopOver";
-import { fileExtensionAtom, languageAtom } from "../../recoil/atom";
+import TreeItemLabel from "../../components/TreeItemLabel";
 import { CheckExtensionContext } from "../../context/CheckExtensionContext";
+import { DirectoryContext } from "../../context/DirectoryContext";
+import { SelectedNodeContext } from "../../context/SelectedNodeContext";
+import { RenderTree } from "../../interfaces/index";
+import { fileExtensionAtom, languageAtom } from "../../recoil/atom";
+import { appendChildToNode, checkFileType } from "./operations";
 
 const Directories = () => {
   const selectedLanguage = useRecoilValue(languageAtom);
@@ -44,6 +44,7 @@ const Directories = () => {
         children: [],
       });
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -69,7 +70,6 @@ const Directories = () => {
     //     customerObjectStore.add(customer);
     //   });
     // };
-
   }, [data]);
 
   useEffect(() => {}, [selectedLanguage]);

@@ -1,5 +1,4 @@
 // import { acceptedFilesRegex } from "../utils/regex";
-import { fileExtensionAtom } from "../../recoil/atom";
 
 // create a new file / folder:
 export const appendChildToNode = (node: any, nodeId: any, data: any) => {
@@ -49,7 +48,7 @@ export const checkFileType = (
 ) => {
   const splitLength = fileName.split(".").length;
   const fileExtension: string = fileName.split(".")[splitLength - 1];
-  
+
   if (fileExtension === fileExtensionData[selectedLanguage]) {
     return true;
   } else {

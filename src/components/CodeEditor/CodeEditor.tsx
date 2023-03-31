@@ -1,15 +1,10 @@
+import { autocompletion, CompletionContext } from "@codemirror/autocomplete";
+import { langs } from "@uiw/codemirror-extensions-langs";
+import CodeMirror from "@uiw/react-codemirror";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { CodeMirrorProps } from "../../interfaces";
-import CodeMirror from "@uiw/react-codemirror";
-import { CompletionContext } from "@codemirror/autocomplete";
-import { autocompletion } from "@codemirror/autocomplete";
-import {
-  loadLanguage,
-  langNames,
-  langs,
-} from "@uiw/codemirror-extensions-langs";
 import { languageAtom, languagesAtom } from "../../recoil/atom";
-import { useEffect, useState } from "react";
 
 const CodeEditor = ({ selectedNode, onChange }: CodeMirrorProps) => {
   const selectedLanguage = useRecoilValue<string>(languageAtom);
@@ -19,12 +14,12 @@ const CodeEditor = ({ selectedNode, onChange }: CodeMirrorProps) => {
 
   useEffect(() => {
     setExtension(languages[selectedLanguage]);
-  }, [selectedLanguage]);
+  }, [selectedLanguage, languages]);
 
   function myCompletions(context: CompletionContext) {
     let word = context.matchBefore(/\w*/);
 
-    if (word === null || (word.from == word.to && !context.explicit))
+    if (word === null || (word.from === word.to && !context.explicit))
       return null;
     return {
       from: word.from,
