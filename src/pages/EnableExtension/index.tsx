@@ -1,14 +1,8 @@
-import {
-  FormControl,
-  MenuItem,
-  OutlinedInput,
-  SelectChangeEvent,
-} from "@mui/material";
+import { FormControl, MenuItem, OutlinedInput } from "@mui/material";
 import { useContext, useState } from "react";
 import uuid from "react-uuid";
 import { CustomSelect } from "../../components/CustomSelect";
 import Dialogues from "../../components/Dialogues";
-import { CheckExtensionContext } from "../../context/CheckExtensionContext";
 import { ExtensionListContext } from "../../context/ExtensionListContext";
 
 const EnableExtension = () => {

@@ -1,18 +1,17 @@
-import { useEffect, useState } from "react";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import { Drawer, Grid } from "@mui/material";
+import { useState } from "react";
+import { CheckExtensionContext } from "../../context/CheckExtensionContext";
 import { DirectoryContext } from "../../context/DirectoryContext";
+import { SelectedNodeContext } from "../../context/SelectedNodeContext";
+import { RenderTree } from "../../interfaces";
+import CreateExtension from "../CreateExtension";
 import Directories from "../Directories";
 import Editor from "../Editor";
-import { directoriesContainer, fileContainer, filesMobileView } from "./styles";
-import { RenderTree } from "../../interfaces";
-import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import { SelectedNodeContext } from "../../context/SelectedNodeContext";
 import SelectLanguage from "../Editor/SelectLanguage";
-import { CheckExtensionContext } from "../../context/CheckExtensionContext";
-import EnableExtension from "../EnableExtension";
-import CreateExtension from "../CreateExtension";
-import ExtensionList from "../ExtensionList";
-import { ExtensionListContext } from "../../context/ExtensionListContext";
+// import EnableExtension from "../EnableExtension";
+// import ExtensionList from "../ExtensionList";
+import { directoriesContainer, fileContainer, filesMobileView } from "./styles";
 
 const HomePage = () => {
   const [isExtension, setIsExtension] = useState<boolean>(false);
@@ -32,6 +31,7 @@ const HomePage = () => {
     children: [],
   });
 
+  // eslint-disable-next-line
   const [width, setWidth] = useState<number>(window.innerWidth);
   const [openDirectories, setOpenDirectories] = useState<boolean>(false);
 
@@ -59,8 +59,8 @@ const HomePage = () => {
             >
               {width > 600 ? (
                 <Grid container direction="column">
-                  <EnableExtension />
-                  <ExtensionList />
+                  {/* <EnableExtension />
+                  <ExtensionList /> */}
                   <SelectLanguage />
                   <Directories />
                 </Grid>
@@ -77,8 +77,8 @@ const HomePage = () => {
                     sx={() => filesMobileView(width)}
                   >
                     <Grid container direction="column">
-                      <EnableExtension />
-                      <ExtensionList />
+                      {/* <EnableExtension />
+                      <ExtensionList /> */}
                       <SelectLanguage />
                       <Directories />
                     </Grid>

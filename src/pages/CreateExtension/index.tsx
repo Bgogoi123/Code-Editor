@@ -1,10 +1,10 @@
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import CodeMirror from "@uiw/react-codemirror";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import { Tooltip } from "@mui/material";
+import CodeMirror from "@uiw/react-codemirror";
 import { useContext, useEffect, useState } from "react";
-import { functionRegex } from "../../constants/regex";
 import PopOver from "../../components/PopOver";
+import { functionRegex } from "../../constants/regex";
 import { CheckExtensionContext } from "../../context/CheckExtensionContext";
 import { ExtensionListContext } from "../../context/ExtensionListContext";
 
@@ -32,6 +32,7 @@ const CreateExtension = () => {
     if (extensionArray.length > 0) {
       setScriptContent(extensionArray[extensionIndex].content);
     }
+    // eslint-disable-next-line
   }, [extensionId]);
 
   const placeholder = `/* Configure your Extension here [doesn't accept Arrow Functions] */`;
@@ -67,7 +68,7 @@ const CreateExtension = () => {
 
   const saveExtension = () => {
     // save extension:
-    if (scriptContent   !== "" && extensionId !== "") {
+    if (scriptContent !== "" && extensionId !== "") {
       const tempArray = extensionArray;
       tempArray[extensionIndex].content = scriptContent;
       setExtensionArray(tempArray);
@@ -83,6 +84,7 @@ const CreateExtension = () => {
     }
 
     function evaluateExtension(content: string) {
+      // eslint-disable-next-line no-eval
       eval(content);
     }
 

@@ -1,13 +1,11 @@
-import { useCallback, useContext, useState } from "react";
-import { Grid } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
+import { Grid } from "@mui/material";
+import { useCallback, useContext, useState } from "react";
+import CodeEditor from "../../components/CodeEditor";
+import PopOver from "../../components/PopOver";
+import { DirectoryContext } from "../../context/DirectoryContext";
 import { SelectedNodeContext } from "../../context/SelectedNodeContext";
 import { appendChildToNode } from "../Directories/operations";
-import CodeEditor from "../../components/CodeEditor";
-import { DirectoryContext } from "../../context/DirectoryContext";
-import PopOver from "../../components/PopOver";
-import SelectLanguage from "./SelectLanguage";
-import { RenderTree } from "../../interfaces";
 
 const Editor = () => {
   const { data, setData } = useContext(DirectoryContext);

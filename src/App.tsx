@@ -1,7 +1,7 @@
-import HomePage from "./pages/HomePage";
-import "./App.css";
 import { useState } from "react";
+import "./App.css";
 import { ExtensionListContext } from "./context/ExtensionListContext";
+import HomePage from "./pages/HomePage";
 
 function App() {
   const [extensionArray, setExtensionArray] = useState<
